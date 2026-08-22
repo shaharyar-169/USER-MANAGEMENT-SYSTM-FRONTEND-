@@ -11,7 +11,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import UserDashboard from './pages/UserDashboard';
 import PrivateRoute from './components/commons/PrivateRoute';
 import Header from './components/commons/Header';
-// APP FUNCTION
+
 function App() {
   const location = useLocation();
   
