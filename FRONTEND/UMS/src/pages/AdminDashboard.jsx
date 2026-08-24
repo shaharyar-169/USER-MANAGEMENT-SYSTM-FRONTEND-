@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
 import UserManagement from '../components/admin/UserManagement';
 import CreateUserForm from '../components/admin/CreateUserForm';
 import '../styles/Dashboard.css';
+import '../styles/State.css';
 
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
@@ -11,11 +13,18 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('users');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     totalUsers: 0,
     activeUsers: 0,
     pendingUsers: 0,
-    admins: 1,
+    inactiveUsers: 0,
+    admins: 0,
+    totalGrowth: '0%',
+    activeGrowth: '0%',
+    pendingGrowth: '0%',
+    inactiveGrowth: '0%',
+    adminGrowth: '—'
   });
 
   useEffect(() => {
@@ -24,19 +33,64 @@ const AdminDashboard = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // ✅ Fetch real stats from database
   useEffect(() => {
     const fetchStats = async () => {
       try {
+        setLoading(true);
+        
+        // Fetch all users
+        const response = await api.get('/users');
+        const users = response.data.users || [];
+        
+        // Calculate stats from real data
+        const totalUsers = users.length;
+        const activeUsers = users.filter(u => u.status === 'active').length;
+        const pendingUsers = users.filter(u => u.status === 'pending').length;
+        const inactiveUsers = users.filter(u => u.status === 'inactive').length;
+        const admins = users.filter(u => u.role === 'admin').length;
+        
+        // Calculate growth (compare with previous month)
+        const now = new Date();
+        const oneMonthAgo = new Date();
+        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+        
+        const newUsers = users.filter(u => new Date(u.created_at) > oneMonthAgo).length;
+        const previousTotal = totalUsers - newUsers;
+        const totalGrowth = previousTotal > 0 ? `${Math.round((newUsers / previousTotal) * 100)}%` : '0%';
+        
+        const newActive = users.filter(u => u.status === 'active' && new Date(u.created_at) > oneMonthAgo).length;
+        const previousActive = activeUsers - newActive;
+        const activeGrowth = previousActive > 0 ? `${Math.round((newActive / previousActive) * 100)}%` : '0%';
+        
+        const newPending = users.filter(u => u.status === 'pending' && new Date(u.created_at) > oneMonthAgo).length;
+        const previousPending = pendingUsers - newPending;
+        const pendingGrowth = previousPending > 0 ? `${Math.round((newPending / previousPending) * 100)}%` : '0%';
+        
+        const newInactive = users.filter(u => u.status === 'inactive' && new Date(u.created_at) > oneMonthAgo).length;
+        const previousInactive = inactiveUsers - newInactive;
+        const inactiveGrowth = previousInactive > 0 ? `${Math.round((newInactive / previousInactive) * 100)}%` : '0%';
+        
         setStats({
-          totalUsers: 124,
-          activeUsers: 98,
-          pendingUsers: 15,
-          admins: 1,
+          totalUsers,
+          activeUsers,
+          pendingUsers,
+          inactiveUsers,
+          admins,
+          totalGrowth,
+          activeGrowth,
+          pendingGrowth,
+          inactiveGrowth,
+          adminGrowth: '—'
         });
+        
       } catch (error) {
         console.error('Error fetching stats:', error);
+      } finally {
+        setLoading(false);
       }
     };
+    
     fetchStats();
   }, []);
 
@@ -60,7 +114,6 @@ const AdminDashboard = () => {
     switch(activeTab) {
       case 'users':
         return <UserManagement onUpdateUser={(userData) => {
-          // Handle update user
           console.log('Update user:', userData);
         }} />;
       case 'create':
@@ -87,6 +140,39 @@ const AdminDashboard = () => {
   };
 
   const currentMenuItem = menuItems.find(item => item.id === activeTab);
+
+  // Helper to get trend class
+  const getTrendClass = (value) => {
+    if (value === '—' || value === '0%') return 'neutral';
+    const numValue = parseFloat(value);
+    if (numValue > 0) return 'up';
+    if (numValue < 0) return 'down';
+    return 'neutral';
+  };
+
+  // Helper to get trend icon
+  const getTrendIcon = (value) => {
+    if (value === '—' || value === '0%') {
+      return (
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      );
+    }
+    const numValue = parseFloat(value);
+    if (numValue > 0) {
+      return (
+        <>
+          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+          <polyline points="17 6 23 6 23 12"/>
+        </>
+      );
+    }
+    return (
+      <>
+        <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/>
+        <polyline points="17 18 23 18 23 12"/>
+      </>
+    );
+  };
 
   return (
     <div className="admin-dashboard">
@@ -184,48 +270,145 @@ const AdminDashboard = () => {
           </div>
         </header>
 
-        <div className="stats-grid">
-          <div className="stat-card total-users">
-            <div className="stat-icon-wrapper">
-              <span className="stat-icon">👥</span>
-            </div>
-            <div className="stat-info">
-              <span className="stat-value">{stats.totalUsers}</span>
-              <span className="stat-label">Total Users</span>
-            </div>
-            <div className="stat-trend up">↑ 12.5%</div>
+        {/* ✅ Stats Cards with Real Data - Including Inactive Users */}
+        {loading ? (
+          <div className="stats-loading">
+            <div className="stats-loading-spinner"></div>
+            <p>Loading stats...</p>
           </div>
-          <div className="stat-card active-users">
-            <div className="stat-icon-wrapper">
-              <span className="stat-icon">✅</span>
+        ) : (
+          <div className="stats-grid">
+            {/* Total Users */}
+            <div className="stat-card total-users">
+              <div className="stat-card-inner">
+                <div className="stat-icon-wrapper">
+                  <span className="stat-icon">👥</span>
+                </div>
+                <div className="stat-content">
+                  <div className="stat-info">
+                    <span className="stat-value">{stats.totalUsers}</span>
+                    <span className="stat-label">Total Users</span>
+                  </div>
+                  <div className={`stat-trend ${getTrendClass(stats.totalGrowth)}`}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      {getTrendIcon(stats.totalGrowth)}
+                    </svg>
+                    {stats.totalGrowth}
+                  </div>
+                </div>
+              </div>
+              <div className="stat-progress-bar">
+                <div className="stat-progress-fill" style={{ 
+                  width: `${Math.min((stats.totalUsers / 100) * 100, 100)}%` 
+                }}></div>
+              </div>
             </div>
-            <div className="stat-info">
-              <span className="stat-value">{stats.activeUsers}</span>
-              <span className="stat-label">Active Users</span>
+
+            {/* Active Users */}
+            <div className="stat-card active-users">
+              <div className="stat-card-inner">
+                <div className="stat-icon-wrapper">
+                  <span className="stat-icon">✅</span>
+                </div>
+                <div className="stat-content">
+                  <div className="stat-info">
+                    <span className="stat-value">{stats.activeUsers}</span>
+                    <span className="stat-label">Active Users</span>
+                  </div>
+                  <div className={`stat-trend ${getTrendClass(stats.activeGrowth)}`}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      {getTrendIcon(stats.activeGrowth)}
+                    </svg>
+                    {stats.activeGrowth}
+                  </div>
+                </div>
+              </div>
+              <div className="stat-progress-bar">
+                <div className="stat-progress-fill" style={{ 
+                  width: `${stats.totalUsers > 0 ? Math.round((stats.activeUsers / stats.totalUsers) * 100) : 0}%` 
+                }}></div>
+              </div>
             </div>
-            <div className="stat-trend up">↑ 8.3%</div>
+
+            {/* Pending Users */}
+            <div className="stat-card pending-users">
+              <div className="stat-card-inner">
+                <div className="stat-icon-wrapper">
+                  <span className="stat-icon">⏳</span>
+                </div>
+                <div className="stat-content">
+                  <div className="stat-info">
+                    <span className="stat-value">{stats.pendingUsers}</span>
+                    <span className="stat-label">Pending Users</span>
+                  </div>
+                  <div className={`stat-trend ${getTrendClass(stats.pendingGrowth)}`}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      {getTrendIcon(stats.pendingGrowth)}
+                    </svg>
+                    {stats.pendingGrowth}
+                  </div>
+                </div>
+              </div>
+              <div className="stat-progress-bar">
+                <div className="stat-progress-fill" style={{ 
+                  width: `${stats.totalUsers > 0 ? Math.round((stats.pendingUsers / stats.totalUsers) * 100) : 0}%` 
+                }}></div>
+              </div>
+            </div>
+
+            {/* ✅ Inactive Users - NEW */}
+            <div className="stat-card inactive-users">
+              <div className="stat-card-inner">
+                <div className="stat-icon-wrapper">
+                  <span className="stat-icon">🚫</span>
+                </div>
+                <div className="stat-content">
+                  <div className="stat-info">
+                    <span className="stat-value">{stats.inactiveUsers}</span>
+                    <span className="stat-label">Inactive Users</span>
+                  </div>
+                  <div className={`stat-trend ${getTrendClass(stats.inactiveGrowth)}`}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      {getTrendIcon(stats.inactiveGrowth)}
+                    </svg>
+                    {stats.inactiveGrowth}
+                  </div>
+                </div>
+              </div>
+              <div className="stat-progress-bar">
+                <div className="stat-progress-fill" style={{ 
+                  width: `${stats.totalUsers > 0 ? Math.round((stats.inactiveUsers / stats.totalUsers) * 100) : 0}%` 
+                }}></div>
+              </div>
+            </div>
+
+            {/* Admins */}
+            <div className="stat-card admins">
+              <div className="stat-card-inner">
+                <div className="stat-icon-wrapper">
+                  <span className="stat-icon">👑</span>
+                </div>
+                <div className="stat-content">
+                  <div className="stat-info">
+                    <span className="stat-value">{stats.admins}</span>
+                    <span className="stat-label">Admins</span>
+                  </div>
+                  <div className="stat-trend neutral">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    {stats.adminGrowth}
+                  </div>
+                </div>
+              </div>
+              <div className="stat-progress-bar">
+                <div className="stat-progress-fill" style={{ 
+                  width: `${stats.totalUsers > 0 ? Math.round((stats.admins / stats.totalUsers) * 100) : 0}%` 
+                }}></div>
+              </div>
+            </div>
           </div>
-          <div className="stat-card pending-users">
-            <div className="stat-icon-wrapper">
-              <span className="stat-icon">⏳</span>
-            </div>
-            <div className="stat-info">
-              <span className="stat-value">{stats.pendingUsers}</span>
-              <span className="stat-label">Pending Users</span>
-            </div>
-            <div className="stat-trend down">↓ 2.1%</div>
-          </div>
-          <div className="stat-card admins">
-            <div className="stat-icon-wrapper">
-              <span className="stat-icon">👑</span>
-            </div>
-            <div className="stat-info">
-              <span className="stat-value">{stats.admins}</span>
-              <span className="stat-label">Admins</span>
-            </div>
-            <div className="stat-trend">—</div>
-          </div>
-        </div>
+        )}
 
         <div className="content-area">
           {renderContent()}

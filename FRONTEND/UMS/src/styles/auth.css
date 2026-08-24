@@ -1,38 +1,33 @@
-/* styles/auth.css */
+/* styles/Auth.css */
 
 /* ============================================
-   AUTH CONTAINER - FULL SCREEN FIT
+   GLOBAL BOX SIZING
+   ============================================ */
+.auth-container,
+.auth-container * {
+  box-sizing: border-box;
+}
+
+/* ============================================
+   AUTH CONTAINER
    ============================================ */
 .auth-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Full viewport height */
-  width: 100vw; /* Full viewport width */
+  min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 20px;
-  overflow: hidden; /* Prevent scrolling */
-  position: fixed;
-  top: 0;
-  left: 0;
 }
 
 .auth-card {
   background: white;
   border-radius: 16px;
-  padding: 30px 35px;
+  padding: 40px;
   width: 100%;
   max-width: 420px;
-  max-height: 95vh;
-  overflow-y: auto; /* Allow internal scroll if needed */
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   animation: slideUp 0.5s ease;
-}
-
-/* Hide scrollbar but keep functionality */
-.auth-card::-webkit-scrollbar {
-  width: 0px;
-  background: transparent;
 }
 
 @keyframes slideUp {
@@ -40,6 +35,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -47,30 +43,29 @@
 }
 
 /* ============================================
-   AUTH HEADER - COMPACT
+   AUTH HEADER
    ============================================ */
 .auth-header {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .auth-logo {
-  font-size: 40px;
+  font-size: 48px;
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .auth-header h2 {
   margin: 0;
   color: #333;
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 24px;
 }
 
 .auth-header p {
   color: #666;
-  margin: 3px 0 0;
-  font-size: 13px;
+  margin: 5px 0 0;
+  font-size: 14px;
 }
 
 .email-display {
@@ -81,66 +76,94 @@
 }
 
 /* ============================================
-   FORM GROUPS - COMPACT
+   FORM GROUPS
    ============================================ */
 .form-group {
-  margin-bottom: 14px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   color: #555;
   font-weight: 500;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 /* ============================================
-   INPUT WRAPPER - COMPACT
+   INPUT WRAPPER
    ============================================ */
 .input-wrapper {
   position: relative;
+
   display: flex;
   align-items: center;
-  border: 2px solid #e0e0e0;
+
+  width: 100%;
+  height: 48px;
+
+  border: 1px solid #e0e0e0;
   border-radius: 8px;
-  transition: border-color 0.3s;
+
   background: white;
   overflow: hidden;
-  height: 42px; /* Compact height */
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
+/* Focus state */
 .input-wrapper:focus-within {
-  border-color: #667eea;
+  border: 1px solid #667eea;
+  box-shadow: 0 0 0 1px rgba(102, 126, 234, 0.08);
 }
 
-/* Icon Container */
+/* ============================================
+   INPUT ICON
+   ============================================ */
 .input-icon {
+  width: 44px;
+  min-width: 44px;
+  height: 100%;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  min-width: 38px;
-  height: 100%;
-  font-size: 16px;
-  opacity: 0.6;
-  flex-shrink: 0;
+
+  margin: 0;
   padding: 0;
+
+  font-size: 18px;
   line-height: 1;
+
+  opacity: 0.6;
+
+  flex-shrink: 0;
 }
 
-/* Input field */
+/* ============================================
+   INPUT FIELD
+   ============================================ */
 .input-wrapper input {
   flex: 1;
+
+  width: 100%;
+  min-width: 0;
   height: 100%;
-  padding: 0 10px 0 0;
+
+  margin: 0;
+  padding: 0 12px 0 0;
+
   border: none;
   outline: none;
-  font-size: 14px;
+
   background: transparent;
-  min-width: 0;
-  width: 100%;
+
+  font-size: 14px;
   line-height: 1.2;
+
+  box-sizing: border-box;
 }
 
 .input-wrapper input:disabled {
@@ -150,7 +173,6 @@
 
 .input-wrapper input::placeholder {
   color: #aaa;
-  font-size: 13px;
 }
 
 /* ============================================
@@ -158,20 +180,33 @@
    ============================================ */
 .password-toggle {
   position: absolute;
-  right: 6px;
+
+  right: 8px;
   top: 50%;
+
   transform: translateY(-50%);
-  background: none;
-  border: none;
-  font-size: 16px;
-  cursor: pointer;
-  opacity: 0.6;
-  padding: 2px 6px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  width: 32px;
+  height: 32px;
+
+  padding: 0;
+
+  background: none;
+  border: none;
+
+  font-size: 18px;
   line-height: 1;
+
+  cursor: pointer;
+
+  opacity: 0.6;
+
   transition: opacity 0.2s;
+
   z-index: 2;
 }
 
@@ -185,52 +220,43 @@
 }
 
 /* ============================================
-   FORM OPTIONS - COMPACT
+   HINT TEXT & VALIDATION
    ============================================ */
-.form-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 14px;
+.hint-text {
+  display: block;
+  margin-top: 4px;
+  color: #888;
+  font-size: 12px;
 }
 
-.remember-me {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.field-error {
+  color: #dc3545;
   font-size: 13px;
-  color: #666;
-  cursor: pointer;
+  margin-top: 4px;
 }
 
-.remember-me input[type="checkbox"] {
-  width: 14px;
-  height: 14px;
-  cursor: pointer;
-}
-
-.forgot-link {
-  color: #667eea;
-  text-decoration: none;
+.field-success {
+  color: #28a745;
   font-size: 13px;
-  font-weight: 500;
-}
-
-.forgot-link:hover {
-  text-decoration: underline;
+  margin-top: 4px;
 }
 
 /* ============================================
-   ALERTS - COMPACT
+   ALERTS
    ============================================ */
 .alert {
-  padding: 8px 12px;
+  padding: 12px 16px;
+
   border-radius: 8px;
-  margin-bottom: 14px;
+
+  margin-bottom: 20px;
+
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 13px;
+
+  gap: 10px;
+
+  font-size: 14px;
 }
 
 .alert-error {
@@ -246,27 +272,38 @@
 }
 
 .alert-icon {
-  font-size: 16px;
+  font-size: 18px;
   flex-shrink: 0;
 }
 
 /* ============================================
-   BUTTONS - COMPACT
+   BUTTONS
    ============================================ */
 .auth-btn {
   width: 100%;
-  padding: 11px;
+
+  padding: 14px;
+
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
   color: white;
+
   border: none;
   border-radius: 8px;
-  font-size: 15px;
+
+  font-size: 16px;
   font-weight: 600;
+
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   gap: 8px;
 }
 
@@ -283,14 +320,21 @@
 
 .auth-btn-secondary {
   width: 100%;
-  padding: 11px;
+
+  padding: 14px;
+
   background: transparent;
+
   color: #667eea;
+
   border: 2px solid #667eea;
   border-radius: 8px;
-  font-size: 15px;
+
+  font-size: 16px;
   font-weight: 600;
+
   cursor: pointer;
+
   transition: all 0.2s;
 }
 
@@ -300,10 +344,14 @@
 
 .auth-btn-link {
   display: inline-block;
+
   color: #667eea;
+
   text-decoration: none;
+
   font-weight: 500;
-  padding: 8px 0;
+
+  padding: 10px 0;
 }
 
 .auth-btn-link:hover {
@@ -311,20 +359,26 @@
 }
 
 /* ============================================
-   FOOTER - COMPACT
+   FOOTER
    ============================================ */
 .auth-footer {
   text-align: center;
-  margin-top: 16px;
-  padding-top: 14px;
+
+  margin-top: 20px;
+  padding-top: 20px;
+
   border-top: 1px solid #eee;
+
   color: #666;
-  font-size: 13px;
+
+  font-size: 14px;
 }
 
 .auth-footer a {
   color: #667eea;
+
   text-decoration: none;
+
   font-weight: 500;
 }
 
@@ -333,19 +387,68 @@
 }
 
 /* ============================================
-   USER INFO (Reset Password)
+   FORM OPTIONS
+   ============================================ */
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 20px;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  font-size: 14px;
+  color: #666;
+
+  cursor: pointer;
+}
+
+.remember-me input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+
+  cursor: pointer;
+}
+
+.forgot-link {
+  color: #667eea;
+
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+/* ============================================
+   USER INFO (RESET PASSWORD)
    ============================================ */
 .user-info {
   background: #f0f4ff;
-  padding: 10px 12px;
+
+  padding: 12px 15px;
+
   border-radius: 8px;
-  margin-bottom: 14px;
+
+  margin-bottom: 20px;
+
   text-align: center;
 }
 
 .user-info p {
-  margin: 3px 0;
-  font-size: 13px;
+  margin: 4px 0;
+
+  font-size: 14px;
+
   color: #555;
 }
 
@@ -354,19 +457,25 @@
    ============================================ */
 .info-box {
   background: #f8f9fa;
-  padding: 12px;
+
+  padding: 15px;
+
   border-radius: 8px;
-  margin: 12px 0;
+
+  margin: 15px 0;
 }
 
 .info-box p {
-  margin: 4px 0;
-  font-size: 13px;
+  margin: 5px 0;
+
+  font-size: 14px;
+
   color: #555;
 }
 
 .info-box.error {
   background: #f8d7da;
+
   border: 1px solid #f5c6cb;
 }
 
@@ -379,9 +488,12 @@
    ============================================ */
 .auth-actions {
   display: flex;
+
   flex-direction: column;
-  gap: 8px;
-  margin-top: 12px;
+
+  gap: 10px;
+
+  margin-top: 15px;
 }
 
 /* ============================================
@@ -389,22 +501,33 @@
    ============================================ */
 .spinner {
   display: inline-block;
+
   width: 16px;
   height: 16px;
+
   border: 2px solid rgba(255, 255, 255, 0.3);
+
   border-top: 2px solid white;
+
   border-radius: 50%;
+
   animation: spin 0.8s linear infinite;
+
   flex-shrink: 0;
 }
 
 .spinner-large {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
+
   border: 4px solid #f3f3f3;
+
   border-top: 4px solid #667eea;
+
   border-radius: 50%;
+
   animation: spin 1s linear infinite;
+
   margin: 20px auto;
 }
 
@@ -412,6 +535,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -419,30 +543,10 @@
 
 .loading-spinner-container {
   display: flex;
+
   justify-content: center;
-  padding: 15px 0;
-}
 
-/* ============================================
-   HINT TEXT & VALIDATION
-   ============================================ */
-.hint-text {
-  display: block;
-  margin-top: 3px;
-  color: #888;
-  font-size: 12px;
-}
-
-.field-error {
-  color: #dc3545;
-  font-size: 12px;
-  margin-top: 3px;
-}
-
-.field-success {
-  color: #28a745;
-  font-size: 12px;
-  margin-top: 3px;
+  padding: 20px 0;
 }
 
 /* ============================================
@@ -450,219 +554,95 @@
    ============================================ */
 @media (max-width: 480px) {
   .auth-card {
-    padding: 20px 18px;
-    max-width: 100%;
+    padding: 25px 20px;
   }
 
   .auth-header h2 {
     font-size: 20px;
-  }
-
-  .auth-logo {
-    font-size: 34px;
   }
 
   .form-options {
     flex-direction: column;
-    gap: 8px;
+
+    gap: 10px;
+
     align-items: flex-start;
   }
 
+  .auth-logo {
+    font-size: 36px;
+  }
+
   .input-wrapper {
-    height: 38px;
+    height: 44px;
   }
 
   .input-icon {
-    width: 34px;
-    min-width: 34px;
-    font-size: 14px;
+    width: 38px;
+    min-width: 38px;
+margin-left: 0px !important;
+    font-size: 16px;
   }
 
   .input-wrapper input {
     font-size: 13px;
-    padding: 0 8px 0 0;
-  }
 
-  .input-wrapper input::placeholder {
-    font-size: 12px;
+    padding: 0 10px 0 0;
   }
 
   .password-toggle {
-    font-size: 14px;
-    right: 4px;
-    padding: 2px 4px;
-  }
-
-  .auth-btn {
-    font-size: 14px;
-    padding: 10px;
-  }
-
-  .auth-header p {
-    font-size: 12px;
-  }
-}
-
-@media (max-width: 380px) {
-  .auth-card {
-    padding: 16px 14px;
-  }
-
-  .auth-header h2 {
-    font-size: 18px;
-  }
-
-  .auth-logo {
-    font-size: 30px;
-  }
-
-  .input-wrapper {
-    height: 36px;
-  }
-
-  .input-icon {
     width: 30px;
-    min-width: 30px;
-    font-size: 13px;
-  }
+    height: 30px;
 
-  .input-wrapper input {
-    font-size: 12px;
+    font-size: 16px;
+
+    right: 6px;
   }
 
   .auth-btn {
-    font-size: 13px;
-    padding: 9px;
-  }
+    font-size: 14px;
 
-  .form-group {
-    margin-bottom: 10px;
-  }
-
-  .alert {
-    padding: 6px 10px;
-    font-size: 12px;
+    padding: 12px;
   }
 }
 
 /* ============================================
-   SCREEN HEIGHT OPTIMIZATION
+   SMALL MOBILE
    ============================================ */
-@media (max-height: 700px) {
+@media (max-width: 380px) {
   .auth-card {
-    padding: 18px 25px;
-  }
-
-  .auth-header {
-    margin-bottom: 12px;
-  }
-
-  .auth-logo {
-    font-size: 32px;
-    margin-bottom: 2px;
-  }
-
-  .auth-header h2 {
-    font-size: 20px;
-  }
-
-  .auth-header p {
-    font-size: 12px;
-  }
-
-  .form-group {
-    margin-bottom: 10px;
-  }
-
-  .input-wrapper {
-    height: 38px;
-  }
-
-  .input-icon {
-    font-size: 14px;
-    width: 34px;
-    min-width: 34px;
-  }
-
-  .form-options {
-    margin-bottom: 10px;
-  }
-
-  .auth-btn {
-    padding: 9px;
-    font-size: 14px;
-  }
-
-  .auth-footer {
-    margin-top: 10px;
-    padding-top: 10px;
-  }
-
-  .alert {
-    padding: 6px 10px;
-    margin-bottom: 10px;
-    font-size: 12px;
-  }
-}
-
-@media (max-height: 600px) {
-  .auth-card {
-    padding: 14px 20px;
-    max-height: 98vh;
-  }
-
-  .auth-logo {
-    font-size: 28px;
+    padding: 20px 15px;
   }
 
   .auth-header h2 {
     font-size: 18px;
   }
 
+  .auth-logo {
+    font-size: 32px;
+  }
+
   .input-wrapper {
-    height: 34px;
+    height: 40px;
   }
 
   .input-icon {
-    width: 30px;
-    min-width: 30px;
-    font-size: 13px;
+    width: 34px;
+    min-width: 34px;
+
+    font-size: 14px;
   }
 
-  .auth-btn {
-    padding: 8px;
-    font-size: 13px;
-  }
-
-  .form-group {
-    margin-bottom: 8px;
-  }
-
-  .form-group label {
+  .input-wrapper input {
     font-size: 12px;
   }
 
-  .auth-footer {
-    margin-top: 8px;
-    padding-top: 8px;
-    font-size: 12px;
-  }
+  .password-toggle {
+    width: 28px;
+    height: 28px;
 
-  .form-options {
-    margin-bottom: 8px;
-  }
+    font-size: 14px;
 
-  .remember-me {
-    font-size: 12px;
-  }
-
-  .forgot-link {
-    font-size: 12px;
-  }
-
-  .alert {
-    padding: 5px 8px;
-    margin-bottom: 8px;
-    font-size: 12px;
+    right: 5px;
   }
 }

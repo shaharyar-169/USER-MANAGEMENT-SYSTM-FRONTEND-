@@ -1,32 +1,44 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+// pages/Login.jsx
+
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import '../styles/Login.css';
+import '../styles/auth.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
+
+  useEffect(() => {
+    if (location.state?.message) {
+      setSuccess(location.state.message);
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
     setLoading(true);
 
     const result = await login(email, password);
     
     if (result.success) {
-      // ✅ Redirect based on role after successful login
       if (result.user.role === 'admin') {
         navigate('/admin/dashboard');
       } else {
         navigate('/user/dashboard');
       }
     } else {
-      setError(result.message);
+      setError(result.message || 'Login failed. Please try again.');
     }
     
     setLoading(false);
@@ -40,6 +52,13 @@ const Login = () => {
           <h2>Welcome Back</h2>
           <p>Login to your account to continue</p>
         </div>
+
+        {success && (
+          <div className="alert alert-success">
+            <span className="alert-icon">✅</span>
+            {success}
+          </div>
+        )}
 
         {error && (
           <div className="alert alert-error">
@@ -69,13 +88,21 @@ const Login = () => {
             <div className="input-wrapper">
               <span className="input-icon">🔒</span>
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
                 required
                 disabled={loading}
               />
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+                disabled={loading}
+              >
+                {showPassword ? '🙈' : '👁️'}
+              </button>
             </div>
           </div>
 
