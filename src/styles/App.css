@@ -681,9 +681,8 @@ body {
 .main-content.full-width {
   padding: 0;
   max-width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin: 0;
+  width: 100%;
   min-height: 100vh;
 }
 }

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../services/api';
-import '../styles/Login.css';
+import '../styles/CompleteRegistration.css';
 
 const CompleteRegistration = () => {
   const [searchParams] = useSearchParams();
