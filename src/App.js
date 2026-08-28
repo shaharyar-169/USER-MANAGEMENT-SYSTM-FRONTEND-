@@ -17,13 +17,14 @@ import Header from './components/commons/Header';
 function App() {
   const location = useLocation();
   
-  // Hide header on auth pages
+  // Hide header on auth pages and admin dashboard (has its own sidebar/header)
   const hideHeader = [
-    '/login', 
-    '/register', 
+    '/login',
+    '/register',
     '/complete-registration',
     '/forgot-password',    // ✅ NEW
-    '/reset-password'      // ✅ NEW (will match /reset-password/:token)
+    '/reset-password',     // ✅ NEW (will match /reset-password/:token)
+    '/admin/dashboard'
   ].includes(location.pathname);
 
   return (

@@ -1,4 +1,3 @@
-// components/admin/CreateUserForm.jsx
 import React, { useState } from 'react';
 import api from '../../services/api';
 import Toast from '../commons/Toast';
@@ -63,41 +62,44 @@ const CreateUserForm = () => {
 
       <div className="form-card">
         <div className="form-header">
-          <span className="form-icon">✉️</span>
-          <h2>Invite New User</h2>
-          <span className="form-subtitle">Send invitation email to user</span>
+          <div className="form-icon-wrapper">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="8.5" cy="7" r="4"></circle>
+              <line x1="20" y1="8" x2="20" y2="14"></line>
+              <line x1="23" y1="11" x2="17" y2="11"></line>
+            </svg>
+          </div>
+          <div className="form-header-text">
+            <h2>Invite New User</h2>
+            <p>Send invitation email to new user</p>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Full Name *</label>
-            <div className="input-wrapper">
-              <span className="input-icon">👤</span>
-              <input
-                type="text"
-                name="name"
-                placeholder="Enter full name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
-            </div>
+            <input
+              type="text"
+              name="name"
+              placeholder="Enter full name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
           </div>
 
           <div className="form-group">
             <label>Email Address *</label>
-            <div className="input-wrapper">
-              <span className="input-icon">📧</span>
-              <input
-                type="email"
-                name="email"
-                placeholder="Enter email address"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <small style={{ color: '#888', fontSize: '0.8rem' }}>
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter email address"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+            <small className="form-hint">
               An invitation email will be sent to this address
             </small>
           </div>
@@ -105,82 +107,67 @@ const CreateUserForm = () => {
           <div className="form-row">
             <div className="form-group">
               <label>Age *</label>
-              <div className="input-wrapper">
-                <span className="input-icon">🎂</span>
-                <input
-                  type="number"
-                  name="age"
-                  placeholder="Age"
-                  value={formData.age}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+              <input
+                type="number"
+                name="age"
+                placeholder="Age"
+                value={formData.age}
+                onChange={handleChange}
+                required
+              />
             </div>
 
             <div className="form-group">
               <label>Gender</label>
-              <div className="input-wrapper">
-                <span className="input-icon">⚧</span>
-                <select
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleChange}
-                >
-                  <option value="">Select Gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                  <option value="Prefer not to say">Prefer not to say</option>
-                </select>
-              </div>
+              <select
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+                <option value="Prefer not to say">Prefer not to say</option>
+              </select>
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
               <label>Salary (PKR)</label>
-              <div className="input-wrapper">
-                <span className="input-icon">💰</span>
-                <input
-                  type="number"
-                  name="salary"
-                  placeholder="Salary"
-                  value={formData.salary}
-                  onChange={handleChange}
-                />
-              </div>
+              <input
+                type="number"
+                name="salary"
+                placeholder="Salary"
+                value={formData.salary}
+                onChange={handleChange}
+              />
             </div>
 
             <div className="form-group">
               <label>Role</label>
-              <div className="input-wrapper">
-                <span className="input-icon">👔</span>
-                <select
-                  name="role"
-                  value={formData.role}
-                  onChange={handleChange}
-                >
-                  <option value="user">User</option>
-                  <option value="editor">Editor</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </div>
+              <select
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+              >
+                <option value="user">User</option>
+                <option value="editor">Editor</option>
+                <option value="admin">Admin</option>
+              </select>
             </div>
           </div>
 
           <div className="form-group">
             <label>Address</label>
-            <div className="input-wrapper">
-              <span className="input-icon">📍</span>
-              <input
-                type="text"
-                name="address"
-                placeholder="Enter address"
-                value={formData.address}
-                onChange={handleChange}
-              />
-            </div>
+            <input
+              type="text"
+              name="address"
+              placeholder="Enter address"
+              value={formData.address}
+              onChange={handleChange}
+            />
           </div>
 
           <button type="submit" className="submit-btn" disabled={loading}>
@@ -190,7 +177,13 @@ const CreateUserForm = () => {
                 Sending Invitation...
               </>
             ) : (
-              '✉️ Send Invitation'
+              <>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+                Send Invitation
+              </>
             )}
           </button>
         </form>

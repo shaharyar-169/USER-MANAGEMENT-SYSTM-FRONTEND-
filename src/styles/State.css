@@ -1,11 +1,12 @@
 /* ============================================
-   STATS GRID - 5 Columns
+   STATS GRID - Unified Indigo Design
    ============================================ */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 18px;
-  margin-bottom: 28px;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-shrink: 0;
 }
 
 /* ============================================
@@ -13,174 +14,92 @@
    ============================================ */
 .stat-card {
   background: #ffffff;
-  border-radius: 14px;
-  padding: 20px 22px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  border: 1px solid #f0f0f0;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
-  min-width: 0;
 }
 
-/* Card hover effect */
 .stat-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-}
-
-/* Card accent color bar - top */
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  border-radius: 14px 14px 0 0;
+  border-color: #c7d2fe;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.08);
 }
 
 /* ============================================
-   CARD COLORS - All 5 Cards
+   STAT CARD HEADER - Label + Icon
    ============================================ */
-.stat-card.total-users::before {
-  background: linear-gradient(90deg, #667eea, #764ba2);
-}
-
-.stat-card.active-users::before {
-  background: linear-gradient(90deg, #4caf50, #66bb6a);
-}
-
-.stat-card.pending-users::before {
-  background: linear-gradient(90deg, #ff9800, #ffb74d);
-}
-
-.stat-card.inactive-users::before {
-  background: linear-gradient(90deg, #6c757d, #adb5bd);
-}
-
-.stat-card.admins::before {
-  background: linear-gradient(90deg, #f44336, #ef5350);
-}
-
-/* ============================================
-   STAT CARD INNER (Flex Container)
-   ============================================ */
-.stat-card-inner {
+.stat-card-header {
   display: flex;
   align-items: center;
-  gap: 16px;
-  flex-wrap: nowrap;
+  justify-content: space-between;
+  margin-bottom: 12px;
 }
 
 /* ============================================
-   STAT ICON WRAPPER
+   STAT LABEL - Top Left
+   ============================================ */
+.stat-label {
+  font-size: 0.8125rem;
+  color: #6b7280;
+  font-weight: 500;
+  letter-spacing: -0.1px;
+}
+
+/* ============================================
+   STAT ICON WRAPPER - Unified Indigo
    ============================================ */
 .stat-icon-wrapper {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 22px;
-  transition: all 0.3s ease;
-}
-
-.stat-card.total-users .stat-icon-wrapper {
-  background: rgba(102, 126, 234, 0.12);
-}
-
-.stat-card.active-users .stat-icon-wrapper {
-  background: rgba(76, 175, 80, 0.12);
-}
-
-.stat-card.pending-users .stat-icon-wrapper {
-  background: rgba(255, 152, 0, 0.12);
-}
-
-.stat-card.inactive-users .stat-icon-wrapper {
-  background: rgba(108, 117, 125, 0.12);
-}
-
-.stat-card.admins .stat-icon-wrapper {
-  background: rgba(244, 67, 54, 0.12);
+  background: #eef2ff;
+  color: #6366f1;
+  transition: all 0.2s ease;
 }
 
 .stat-card:hover .stat-icon-wrapper {
   transform: scale(1.05);
+  background: #e0e7ff;
 }
 
 /* ============================================
-   STAT CONTENT (Flex)
+   STAT CARD BODY - Value + Trend
    ============================================ */
-.stat-content {
-  flex: 1;
+.stat-card-body {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  min-width: 0;
-  gap: 12px;
+  gap: 8px;
 }
 
 /* ============================================
-   STAT INFO
+   STAT VALUE
    ============================================ */
-.stat-info {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
 .stat-value {
-  font-size: 28px;
+  font-size: 1.75rem;
   font-weight: 700;
-  color: #1a1a2e;
+  color: #111827;
   line-height: 1.2;
   letter-spacing: -0.5px;
 }
 
-/* Card specific colors */
-.stat-card.total-users .stat-value {
-  color: #667eea;
-}
-
-.stat-card.active-users .stat-value {
-  color: #4caf50;
-}
-
-.stat-card.pending-users .stat-value {
-  color: #ff9800;
-}
-
-.stat-card.inactive-users .stat-value {
-  color: #6c757d;
-}
-
-.stat-card.admins .stat-value {
-  color: #f44336;
-}
-
-.stat-label {
-  font-size: 13px;
-  color: #6c757d;
-  font-weight: 500;
-  margin-top: 2px;
-  letter-spacing: 0.2px;
-}
-
 /* ============================================
-   STAT TREND
+   STAT TREND - Unified Indigo
    ============================================ */
 .stat-trend {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 20px;
+  padding: 3px 6px;
+  border-radius: 4px;
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -192,93 +111,39 @@
 
 /* Trend Up */
 .stat-trend.up {
-  background: rgba(76, 175, 80, 0.1);
-  color: #4caf50;
-}
-
-.stat-trend.up svg {
-  stroke: #4caf50;
+  background: #ecfdf5;
+  color: #059669;
 }
 
 /* Trend Down */
 .stat-trend.down {
-  background: rgba(244, 67, 54, 0.1);
-  color: #f44336;
-}
-
-.stat-trend.down svg {
-  stroke: #f44336;
+  background: #fef2f2;
+  color: #dc2626;
 }
 
 /* Trend Neutral */
 .stat-trend.neutral {
-  background: rgba(108, 117, 125, 0.1);
-  color: #6c757d;
-}
-
-.stat-trend.neutral svg {
-  stroke: #6c757d;
+  background: #f3f4f6;
+  color: #6b7280;
 }
 
 /* ============================================
-   STAT PROGRESS BAR
+   STAT PROGRESS BAR - Unified Indigo
    ============================================ */
 .stat-progress-bar {
   width: 100%;
   height: 3px;
-  background: #f0f0f0;
-  border-radius: 4px;
+  background: #e5e7eb;
+  border-radius: 2px;
   margin-top: 14px;
   overflow: hidden;
-  position: relative;
 }
 
 .stat-progress-fill {
   height: 100%;
-  border-radius: 4px;
-  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-}
-
-.stat-progress-fill::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  animation: shimmerProgress 2s infinite;
-}
-
-@keyframes shimmerProgress {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-/* Progress bar colors */
-.stat-card.total-users .stat-progress-fill {
-  background: linear-gradient(90deg, #667eea, #764ba2);
-}
-
-.stat-card.active-users .stat-progress-fill {
-  background: linear-gradient(90deg, #4caf50, #66bb6a);
-}
-
-.stat-card.pending-users .stat-progress-fill {
-  background: linear-gradient(90deg, #ff9800, #ffb74d);
-}
-
-.stat-card.inactive-users .stat-progress-fill {
-  background: linear-gradient(90deg, #6c757d, #adb5bd);
-}
-
-.stat-card.admins .stat-progress-fill {
-  background: linear-gradient(90deg, #f44336, #ef5350);
+  border-radius: 2px;
+  background: #6366f1;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ============================================
@@ -287,14 +152,12 @@
 @media (max-width: 1200px) {
   .stats-grid {
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
   }
 }
 
 @media (max-width: 992px) {
   .stats-grid {
     grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
   }
 }
 
@@ -305,41 +168,34 @@
   }
 
   .stat-card {
-    padding: 16px 18px;
-    border-radius: 12px;
+    padding: 14px;
   }
 
   .stat-icon-wrapper {
-    width: 40px;
-    height: 40px;
-    font-size: 18px;
-    border-radius: 10px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .stat-icon-wrapper svg {
+    width: 18px;
+    height: 18px;
   }
 
   .stat-value {
-    font-size: 22px;
+    font-size: 1.5rem;
   }
 
   .stat-label {
-    font-size: 12px;
+    font-size: 0.75rem;
   }
 
   .stat-trend {
-    font-size: 11px;
-    padding: 3px 8px;
+    font-size: 0.7rem;
+    padding: 2px 5px;
   }
 
-  .stat-trend svg {
-    width: 10px;
-    height: 10px;
-  }
-
-  .stat-card-inner {
-    gap: 12px;
-  }
-
-  .stat-content {
-    gap: 8px;
+  .stat-card-header {
+    margin-bottom: 10px;
   }
 
   .stat-progress-bar {
@@ -354,41 +210,35 @@
   }
 
   .stat-card {
-    padding: 14px 14px;
-    border-radius: 10px;
+    padding: 12px;
   }
 
   .stat-icon-wrapper {
-    width: 36px;
-    height: 36px;
-    font-size: 16px;
-    border-radius: 8px;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+  }
+
+  .stat-icon-wrapper svg {
+    width: 16px;
+    height: 16px;
   }
 
   .stat-value {
-    font-size: 18px;
+    font-size: 1.25rem;
   }
 
   .stat-label {
-    font-size: 10px;
+    font-size: 0.6875rem;
   }
 
   .stat-trend {
-    font-size: 9px;
-    padding: 2px 6px;
+    font-size: 0.65rem;
+    padding: 2px 4px;
   }
 
-  .stat-trend svg {
-    width: 8px;
-    height: 8px;
-  }
-
-  .stat-card-inner {
-    gap: 10px;
-  }
-
-  .stat-content {
-    gap: 6px;
+  .stat-card-header {
+    margin-bottom: 8px;
   }
 
   .stat-progress-bar {
@@ -404,131 +254,41 @@
   }
 
   .stat-card {
-    padding: 12px 10px;
-    border-radius: 8px;
+    padding: 10px;
+    border-radius: 10px;
   }
 
   .stat-icon-wrapper {
-    width: 30px;
-    height: 30px;
-    font-size: 14px;
-    border-radius: 6px;
+    width: 26px;
+    height: 26px;
+    border-radius: 5px;
+  }
+
+  .stat-icon-wrapper svg {
+    width: 14px;
+    height: 14px;
   }
 
   .stat-value {
-    font-size: 16px;
+    font-size: 1.125rem;
   }
 
   .stat-label {
-    font-size: 9px;
+    font-size: 0.625rem;
   }
 
   .stat-trend {
-    font-size: 8px;
-    padding: 1px 4px;
+    font-size: 0.6rem;
+    padding: 2px 4px;
   }
 
-  .stat-trend svg {
-    width: 6px;
-    height: 6px;
-  }
-
-  .stat-card-inner {
-    gap: 8px;
-  }
-
-  .stat-content {
-    gap: 4px;
+  .stat-card-header {
+    margin-bottom: 6px;
   }
 
   .stat-progress-bar {
     margin-top: 8px;
     height: 2px;
-  }
-}
-
-/* ============================================
-   DARK MODE
-   ============================================ */
-@media (prefers-color-scheme: dark) {
-  .stat-card {
-    background: #1a1a2e;
-    border-color: #2a2a4a;
-  }
-
-  .stat-card:hover {
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-  }
-
-  .stat-value {
-    color: #e9ecef;
-  }
-
-  .stat-card.total-users .stat-value {
-    color: #818cf8;
-  }
-
-  .stat-card.active-users .stat-value {
-    color: #66bb6a;
-  }
-
-  .stat-card.pending-users .stat-value {
-    color: #ffb74d;
-  }
-
-  .stat-card.inactive-users .stat-value {
-    color: #adb5bd;
-  }
-
-  .stat-card.admins .stat-value {
-    color: #ef5350;
-  }
-
-  .stat-label {
-    color: #adb5bd;
-  }
-
-  .stat-card.total-users .stat-icon-wrapper {
-    background: rgba(102, 126, 234, 0.2);
-  }
-
-  .stat-card.active-users .stat-icon-wrapper {
-    background: rgba(76, 175, 80, 0.2);
-  }
-
-  .stat-card.pending-users .stat-icon-wrapper {
-    background: rgba(255, 152, 0, 0.2);
-  }
-
-  .stat-card.inactive-users .stat-icon-wrapper {
-    background: rgba(108, 117, 125, 0.2);
-  }
-
-  .stat-card.admins .stat-icon-wrapper {
-    background: rgba(244, 67, 54, 0.2);
-  }
-
-  .stat-trend.up {
-    background: rgba(76, 175, 80, 0.2);
-    color: #66bb6a;
-  }
-
-  .stat-trend.down {
-    background: rgba(244, 67, 54, 0.2);
-    color: #ef5350;
-  }
-
-  .stat-trend.neutral {
-    background: rgba(108, 117, 125, 0.2);
-    color: #adb5bd;
-  }
-
-  .stat-progress-bar {
-    background: #2a2a4a;
-  }
-
-  .stat-card::before {
-    opacity: 0.8;
   }
 }
 
@@ -542,25 +302,25 @@
   justify-content: center;
   padding: 40px 20px;
   background: #ffffff;
-  border-radius: 14px;
-  border: 1px solid #f0f0f0;
-  margin-bottom: 28px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 24px;
   min-height: 120px;
 }
 
 .stats-loading-spinner {
-  width: 36px;
-  height: 36px;
-  border: 3px solid #f0f0f0;
-  border-top-color: #667eea;
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #6366f1;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
 
 .stats-loading p {
   margin-top: 12px;
-  color: #6c757d;
-  font-size: 14px;
+  color: #6b7280;
+  font-size: 0.875rem;
 }
 
 @keyframes spin {
@@ -569,13 +329,66 @@
   }
 }
 
+/* ============================================
+   DARK MODE
+   ============================================ */
 @media (prefers-color-scheme: dark) {
-  .stats-loading {
-    background: #1a1a2e;
-    border-color: #2a2a4a;
+  .stat-card {
+    background: #1f2937;
+    border-color: #374151;
   }
-  
+
+  .stat-card:hover {
+    border-color: #4f46e5;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+  }
+
+  .stat-icon-wrapper {
+    background: rgba(99, 102, 241, 0.2);
+    color: #818cf8;
+  }
+
+  .stat-card:hover .stat-icon-wrapper {
+    background: rgba(99, 102, 241, 0.3);
+  }
+
+  .stat-value {
+    color: #f3f4f6;
+  }
+
+  .stat-label {
+    color: #9ca3af;
+  }
+
+  .stat-trend.up {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+  }
+
+  .stat-trend.down {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+  }
+
+  .stat-trend.neutral {
+    background: rgba(107, 114, 128, 0.15);
+    color: #9ca3af;
+  }
+
+  .stat-progress-bar {
+    background: #374151;
+  }
+
+  .stat-progress-fill {
+    background: #6366f1;
+  }
+
+  .stats-loading {
+    background: #1f2937;
+    border-color: #374151;
+  }
+
   .stats-loading p {
-    color: #adb5bd;
+    color: #9ca3af;
   }
 }
