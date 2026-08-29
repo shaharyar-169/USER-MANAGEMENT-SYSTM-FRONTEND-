@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import UserManagement from '../components/admin/UserManagement';
 import CreateUserForm from '../components/admin/CreateUserForm';
+import ActivityLog from '../components/admin/ActivityLog';
 import '../styles/Dashboard.css';
 import '../styles/State.css';
 
@@ -101,6 +102,7 @@ const AdminDashboard = () => {
     { id: 'users', label: 'All Users', icon: 'users' },
     { id: 'create', label: 'Create User', icon: 'create' },
     { id: 'analytics', label: 'Analytics', icon: 'analytics' },
+    { id: 'activity', label: 'Activity', icon: 'activity' },
     { id: 'settings', label: 'Settings', icon: 'settings' },
   ];
 
@@ -127,6 +129,11 @@ const AdminDashboard = () => {
           <line x1="18" y1="20" x2="18" y2="10"></line>
           <line x1="12" y1="20" x2="12" y2="4"></line>
           <line x1="6" y1="20" x2="6" y2="14"></line>
+        </svg>
+      ),
+      activity: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
         </svg>
       ),
       settings: (
@@ -197,6 +204,8 @@ const AdminDashboard = () => {
             <p>Coming soon...</p>
           </div>
         );
+      case 'activity':
+        return <ActivityLog />;
       case 'settings':
         return (
           <div className="placeholder-content">
