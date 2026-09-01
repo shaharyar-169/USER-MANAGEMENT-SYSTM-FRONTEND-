@@ -1,7 +1,7 @@
 // context/AuthContext.jsx
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import api from '../services/api';
+import api, { setAuthToken } from '../services/api';
 import PasswordResetService from '../services/passwordReset'; // ✅ Import password reset service
 
 
@@ -9,19 +9,52 @@ const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
+const getTokenKey = (role) => role === 'admin' ? 'admin_token' : 'user_token';
+const getUserKey = (role) => role === 'admin' ? 'admin_user' : 'user_user';
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
-    if (token) {
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      fetchUser();
-    } else {
-      setLoading(false);
+    const storedAdminUser = localStorage.getItem('admin_user');
+    const storedNormalUser = localStorage.getItem('user_user');
+    
+    let storedUser = null;
+    let tokenKey = null;
+    
+    if (storedAdminUser) {
+      try {
+        const parsed = JSON.parse(storedAdminUser);
+        if (parsed.role === 'admin') {
+          storedUser = parsed;
+          tokenKey = 'admin_token';
+        }
+      } catch (e) {}
     }
-  }, [token]);
+    
+    if (!storedUser && storedNormalUser) {
+      try {
+        const parsed = JSON.parse(storedNormalUser);
+        if (parsed.role === 'user') {
+          storedUser = parsed;
+          tokenKey = 'user_token';
+        }
+      } catch (e) {}
+    }
+    
+    if (storedUser && tokenKey) {
+      const storedToken = localStorage.getItem(tokenKey);
+      if (storedToken) {
+        setToken(storedToken);
+        setAuthToken(storedToken);
+        fetchUser();
+        return;
+      }
+    }
+    setLoading(false);
+  }, []);
 
   const fetchUser = async () => {
     try {
@@ -40,8 +73,11 @@ export const AuthProvider = ({ children }) => {
       const response = await api.post('/auth/login', { email, password });
       const { token, user } = response.data;
       
-      localStorage.setItem('token', token);
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      const tokenKey = getTokenKey(user.role);
+      const userKey = getUserKey(user.role);
+      localStorage.setItem(tokenKey, token);
+      localStorage.setItem(userKey, JSON.stringify(user));
+      setAuthToken(token);
       setToken(token);
       setUser(user);
       
@@ -59,7 +95,10 @@ export const AuthProvider = ({ children }) => {
       const response = await api.post('/auth/register', userData);
       const { token, user } = response.data;
       
-      localStorage.setItem('token', token);
+      const tokenKey = getTokenKey(user.role);
+      const userKey = getUserKey(user.role);
+      localStorage.setItem(tokenKey, token);
+      localStorage.setItem(userKey, JSON.stringify(user));
       
       return { success: true, user };
     } catch (error) {
@@ -70,9 +109,19 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    delete api.defaults.headers.common['Authorization'];
+  const logout = async () => {
+    if (user) {
+      try {
+        await api.post('/auth/logout');
+      } catch (error) {
+        console.error('Logout API error:', error);
+      }
+      const tokenKey = getTokenKey(user.role);
+      const userKey = getUserKey(user.role);
+      localStorage.removeItem(tokenKey);
+      localStorage.removeItem(userKey);
+    }
+    setAuthToken(null);
     setToken(null);
     setUser(null);
   };

@@ -137,7 +137,8 @@ const AccordionContent = ({ item, actionType, config, status, metadata, onClose 
     { label: 'Relative', value: date ? formatRelativeTime(date) : 'Unknown' },
   ];
 
-  const performedByName = item.performed_by_name || (item.performed_by ? `User ID: ${item.performed_by}` : 'System');
+  const isAdminAction = ['UPDATE_USER', 'DELETE_USER'].includes(item.action);
+  const performedByName = isAdminAction ? 'Admin' : (item.performed_by_name || (item.performed_by ? `User ID: ${item.performed_by}` : 'System'));
   const performedByFields = [
     { label: 'Performed By', value: performedByName },
     { label: 'ID', value: item.performed_by || 'N/A' },
@@ -483,7 +484,8 @@ const ActivityLog = () => {
                 const config = ACTION_CONFIG[item.actionType] || ACTION_CONFIG.update;
                 const timestamp = getTimestamp(item);
                 const date = timestamp ? new Date(timestamp) : null;
-                const performedByName = item.performed_by_name || (item.performed_by ? `User ID: ${item.performed_by}` : 'System');
+const isAdminAction = ['UPDATE_USER', 'DELETE_USER', 'UPDATE_USER_STATUS'].includes(item.action);
+                const performedByName = isAdminAction ? 'Admin' : (item.performed_by_name || (item.performed_by ? `User ID: ${item.performed_by}` : 'System'));
                 const isExpanded = expandedItem === item._key;
                 const metadata = item.metadata || {};
                 const status = (() => {
@@ -525,9 +527,10 @@ const ActivityLog = () => {
                       <div className="activity-col-performed">
                         {performedByName !== 'System' && (
                           <span className="activity-performed" title="Performed by">
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                              <circle cx="12" cy="7" r="4"></circle>
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M12 2a4 4 0 0 0-4 4v2a4 4 0 0 0 8 0V6a4 4 0 0 0-4-4z"></path>
+                              <path d="M20 21v-2a4 4 0 0 0-4-4h-1"></path>
+                              <path d="M4 21v-2a4 4 0 0 1 4-4h1"></path>
                             </svg>
                             {performedByName}
                           </span>

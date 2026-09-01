@@ -196,8 +196,6 @@
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
   overflow: hidden;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
 }
 
 /* ============================================
@@ -205,8 +203,8 @@
    ============================================ */
 .activity-header-row {
   display: grid;
-  grid-template-columns: 180px 1fr 2fr 180px 160px 60px;
-  gap: 16px;
+  grid-template-columns: minmax(110px, 1.1fr) minmax(80px, 0.7fr) minmax(110px, 1.8fr) minmax(150px, 1.4fr) minmax(100px, 0.9fr) 44px;
+  gap: 10px;
   padding: 9px 16px;
   background: #6F5FBE;
   border-bottom: none;
@@ -216,7 +214,6 @@
   text-transform: uppercase;
   letter-spacing: 0.6px;
   align-items: center;
-  min-width: 820px;
 }
 
 .header-cell {
@@ -228,24 +225,24 @@
   color: #ffffff;
 }
 
-.header-cell.header-user { min-width: 160px; background: transparent; padding: 0px !important;border: none !important; }
-.header-cell.header-action { min-width: 80px; }
+.header-cell.header-user { min-width: 0; background: transparent; padding: 0px !important;border: none !important; }
+.header-cell.header-action { min-width: 0; }
 .header-cell.header-description {
   min-width: 0;
   font-size: 0.68rem;
   font-weight: 700;
 }
 .header-cell.header-datetime {
-  min-width: 220px;
+  min-width: 0;
   font-size: 0.68rem;
   font-weight: 700;
 }
 .header-cell.header-performed {
-  min-width: 120px;
+  min-width: 0;
   font-size: 0.68rem;
   font-weight: 700;
 }
-.header-cell.header-details { width: 40px; justify-content: flex-end; }
+.header-cell.header-details { width: 44px; justify-content: flex-end; }
 
 /* ============================================
    ACTIVITY TIMELINE
@@ -260,13 +257,12 @@
    ============================================ */
 .activity-item {
   display: grid;
-  grid-template-columns: 180px 1fr 2fr 180px 160px 60px;
-  gap: 16px;
+  grid-template-columns: minmax(110px, 1.1fr) minmax(80px, 0.7fr) minmax(110px, 1.8fr) minmax(150px, 1.4fr) minmax(100px, 0.9fr) 44px;
+  gap: 10px;
   padding: 10px 16px;
   border-bottom: 1px solid #f1f5f9;
   transition: background 0.12s ease, box-shadow 0.12s ease;
   align-items: center;
-  min-width: 820px;
 }
 
 .activity-item:last-child {
@@ -350,12 +346,14 @@
 .activity-badge {
   display: inline-flex;
   align-items: center;
-  padding: 2px 7px;
+  padding: 2px 8px;
   border-radius: 999px;
   font-size: 0.5625rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.3px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .activity-badge.green {
@@ -413,18 +411,18 @@
 }
 
 .activity-date {
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 600;
   color: #334155;
 }
 
 .activity-time-separator {
   color: #cbd5e1;
-  font-size: 0.5625rem;
+  font-size: 0.625rem;
 }
 
 .activity-time-value {
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 500;
   color: #64748b;
 }
@@ -458,17 +456,18 @@
 .activity-performed {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  font-size: 0.625rem;
-  color: #94a3b8;
+  gap: 5px;
+  font-size: 0.72rem;
+  color: #64748b;
   font-weight: 500;
   white-space: nowrap;
 }
 
 .activity-performed svg {
-  width: 11px;
-  height: 11px;
+  width: 13px;
+  height: 13px;
   flex-shrink: 0;
+  color: #94a3b8;
 }
 
 /* Eye/View icon button */
@@ -774,17 +773,18 @@
 .activity-performed {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  font-size: 0.625rem;
-  color: #94a3b8;
+  gap: 5px;
+  font-size: 0.72rem;
+  color: #64748b;
   font-weight: 500;
   white-space: nowrap;
 }
 
 .activity-performed svg {
-  width: 11px;
-  height: 11px;
+  width: 13px;
+  height: 13px;
   flex-shrink: 0;
+  color: #94a3b8;
 }
 
 /* ============================================
@@ -796,8 +796,8 @@
 
 .activity-skeleton-row {
   display: grid;
-  grid-template-columns: 180px 1fr 2fr 180px 160px 60px;
-  gap: 16px;
+  grid-template-columns: minmax(110px, 1.1fr) minmax(80px, 0.7fr) minmax(110px, 1.8fr) minmax(150px, 1.4fr) minmax(100px, 0.9fr) 44px;
+  gap: 10px;
   padding: 10px 16px;
   border-bottom: 1px solid #f1f5f9;
 }
@@ -919,13 +919,14 @@
    ============================================ */
 @media (max-width: 1024px) {
   .activity-item {
-    grid-template-columns: 160px 1fr 1.5fr 160px 140px 50px;
-    gap: 12px;
+    grid-template-columns: minmax(100px, 1.1fr) minmax(75px, 0.7fr) minmax(90px, 1.8fr) minmax(140px, 1.4fr) minmax(90px, 0.9fr) 40px;
+    gap: 8px;
     padding: 10px 12px;
   }
   
   .activity-header-row {
-    grid-template-columns: 160px 1fr 1.5fr 160px 140px 50px;
+    grid-template-columns: minmax(100px, 1.1fr) minmax(75px, 0.7fr) minmax(90px, 1.8fr) minmax(140px, 1.4fr) minmax(90px, 0.9fr) 40px;
+    gap: 8px;
   }
   
   .activity-col-user {
