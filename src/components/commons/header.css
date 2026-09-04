@@ -129,24 +129,26 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 6px 12px 6px 6px;
+  padding: 6px 12px 6px 8px;
   border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  border-radius: 10px;
   background: #ffffff;
   cursor: pointer;
   transition: all 0.15s ease;
-  min-width: 140px;
+  min-width: 160px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
 }
 
 .user-profile-btn:hover {
-  background: #f9fafb;
+  background: #fafbfc;
   border-color: #d1d5db;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
 }
 
 .user-profile-btn:focus {
   outline: none;
   border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
 }
 
 .user-avatar-wrapper {
@@ -156,23 +158,24 @@
 }
 
 .user-avatar-text {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   text-transform: uppercase;
+  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.25);
 }
 
 .status-indicator {
   position: absolute;
-  bottom: -2px;
-  right: -2px;
+  bottom: -1px;
+  right: -1px;
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -201,39 +204,58 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  line-height: 1.2;
+  line-height: 1.25;
+  min-width: 0;
 }
 
 .user-name {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #111827;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .user-role-badge {
-  font-size: 0.6rem;
-  font-weight: 500;
+  font-size: 0.5625rem;
+  font-weight: 600;
   text-transform: uppercase;
-  padding: 1px 6px;
-  border-radius: 4px;
-  letter-spacing: 0.3px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.4px;
+  margin-top: 2px;
 }
 
 .user-role-badge.admin {
-  background: #fef2f2;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
   color: #dc2626;
+  border: 1px solid #fecaca;
 }
 
 .user-role-badge.user {
-  background: #ecfdf5;
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
   color: #059669;
+  border: 1px solid #a7f3d0;
 }
 
 .dropdown-arrow {
-  font-size: 0.65rem;
-  color: #9ca3af;
-  transition: transform 0.2s ease;
-  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  color: #94a3b8;
+  background: #f8fafc;
+  transition: all 0.15s ease;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.user-profile-btn:hover .dropdown-arrow {
+  background: #eef2ff;
+  color: #4f46e5;
 }
 
 .dropdown-arrow.open {
@@ -243,22 +265,25 @@
 /* ===== Dropdown Menu ===== */
 .dropdown-menu {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 10px);
   right: 0;
-  min-width: 260px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
-  padding: 8px;
-  animation: dropdownSlide 0.2s ease;
-  border: 1px solid #e5e7eb;
+  min-width: 280px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.06),
+    0 16px 48px rgba(15, 23, 42, 0.12);
+  padding: 0;
+  animation: dropdownSlide 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid #eef1f5;
   z-index: 1001;
+  overflow: hidden;
 }
 
 @keyframes dropdownSlide {
   from {
     opacity: 0;
-    transform: translateY(-8px);
+    transform: translateY(-6px);
   }
   to {
     opacity: 1;
@@ -267,60 +292,74 @@
 }
 
 .dropdown-header {
-  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: linear-gradient(135deg, #fafbff 0%, #f8faff 100%);
+  border-bottom: 1px solid #eef1f5;
 }
 
 .dropdown-user-info {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
+  flex: 1;
 }
 
 .dropdown-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 600;
   text-transform: uppercase;
   flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
 }
 
 .dropdown-user-name {
   font-weight: 600;
-  color: #111827;
+  color: #0f172a;
   font-size: 0.875rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .dropdown-user-email {
   font-size: 0.75rem;
-  color: #9ca3af;
+  color: #64748b;
   margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .dropdown-divider {
   height: 1px;
-  background: #e5e7eb;
-  margin: 6px 0;
+  background: linear-gradient(90deg, transparent, #eef1f5, transparent);
+  margin: 6px 12px;
 }
 
 .dropdown-items {
-  padding: 4px 0;
+  padding: 8px 8px 10px;
 }
 
 .dropdown-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
-  border-radius: 8px;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
   text-decoration: none;
-  color: #374151;
+  color: #334155;
   font-size: 0.8125rem;
   font-weight: 500;
   transition: all 0.15s ease;
@@ -329,21 +368,35 @@
   border: none;
   width: 100%;
   text-align: left;
+  font-family: inherit;
 }
 
 .dropdown-item:hover {
-  background: #f3f4f6;
-  color: #111827;
+  background: linear-gradient(135deg, #eef2ff 0%, #f5f6ff 100%);
+  color: #1e293b;
+}
+
+.dropdown-item:focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 2px;
 }
 
 .dropdown-item .dropdown-icon {
-  width: 16px;
-  height: 16px;
-  color: #6b7280;
+  width: 18px;
+  height: 18px;
+  color: #64748b;
+  flex-shrink: 0;
+  transition: color 0.15s ease;
+}
+
+.dropdown-item:hover .dropdown-icon {
+  color: #4f46e5;
 }
 
 .dropdown-item.logout-item {
   color: #dc2626;
+  font-weight: 600;
+  margin-top: 4px;
 }
 
 .dropdown-item.logout-item .dropdown-icon {
@@ -351,7 +404,11 @@
 }
 
 .dropdown-item.logout-item:hover {
-  background: #fef2f2;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+}
+
+.dropdown-item.logout-item:hover .dropdown-icon {
+  color: #b91c1c;
 }
 
 /* ===== Auth Buttons ===== */

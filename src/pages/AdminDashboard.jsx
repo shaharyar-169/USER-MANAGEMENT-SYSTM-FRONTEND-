@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
@@ -15,6 +15,8 @@ const AdminDashboard = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [loading, setLoading] = useState(true);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef(null);
   const [stats, setStats] = useState({
     totalUsers: 0,
     activeUsers: 0,
@@ -33,6 +35,21 @@ const AdminDashboard = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setUserMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -88,11 +105,6 @@ const AdminDashboard = () => {
 
     fetchStats();
   }, []);
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed);
@@ -329,33 +341,71 @@ const AdminDashboard = () => {
       </aside>
 
       <main className={`main-content ${sidebarCollapsed ? 'expanded' : ''}`}>
-        <header className="top-header">
-          <div className="header-left">
-            <div className="page-header">
-              <h1 className="page-title">{currentMenuItem?.label || 'Dashboard'}</h1>
-              <span className="page-subtitle">Welcome back, {user?.name || 'Admin'}!</span>
-            </div>
-          </div>
-          <div className="header-right">
-            <div className="header-search">
-              <span className="search-icon">{renderIcon('search')}</span>
-              <input type="text" placeholder="Search users..." />
-              <kbd className="search-shortcut">⌘K</kbd>
-            </div>
-            <div className="header-actions">
-              <button className="action-btn" title="Notifications">
-                {renderIcon('bell')}
-                <span className="notification-badge">3</span>
+<header className="top-header">
+          <div className="header-row">
+            <div className="header-left">
+              <button className="mobile-menu-btn" onClick={toggleSidebar} title="Open Menu" aria-label="Open Menu">
+                {renderIcon('menu')}
               </button>
-              <div className="header-user">
-                <span className="header-avatar">
-                  {user?.name?.charAt(0).toUpperCase() || 'A'}
-                </span>
-                <div className="header-user-info">
-                  <span className="header-user-name">{user?.name || 'Admin'}</span>
-                  <span className="header-user-role">Admin</span>
+              <div className="page-header">
+                <h1 className="page-title">{currentMenuItem?.label || 'Dashboard'}</h1>
+                <span className="page-subtitle">Welcome back, {user?.name || 'Admin'}!</span>
+              </div>
+            </div>
+            <div className="header-right">
+              <div className="header-actions">
+                <button className="action-btn" title="Notifications">
+                  {renderIcon('bell')}
+                  <span className="notification-badge">3</span>
+                </button>
+                <div className="header-user-wrapper" ref={userMenuRef}>
+                  <div
+                    className={`header-user ${userMenuOpen ? 'open' : ''}`}
+                    onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  >
+                    <span className="header-avatar">
+                      {user?.name?.charAt(0).toUpperCase() || 'A'}
+                    </span>
+                    <div className="header-user-info">
+                      <span className="header-user-name">{user?.name || 'Admin'}</span>
+                      <span className="header-user-role">Admin</span>
+                    </div>
+                    <span className={`header-user-chevron ${userMenuOpen ? 'open' : ''}`}>
+                      {renderIcon('chevronDown')}
+                    </span>
+                  </div>
+                  {userMenuOpen && (
+                    <div className="header-user-dropdown">
+                      <div className="dropdown-header">
+                        <div className="dropdown-user-info">
+                          <span className="dropdown-avatar">
+                            {user?.name?.charAt(0).toUpperCase() || 'A'}
+                          </span>
+                          <div>
+                            <div className="dropdown-user-name">{user?.name || 'Admin'}</div>
+                            <div className="dropdown-user-email">{user?.email || 'admin@example.com'}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="dropdown-divider"></div>
+                      <div className="dropdown-items">
+                        <button className="dropdown-item" onClick={() => { setUserMenuOpen(false); }}>
+                          {renderIcon('user')}
+                          Admin Profile
+                        </button>
+                        <button className="dropdown-item" onClick={() => { setUserMenuOpen(false); }}>
+                          {renderIcon('settings')}
+                          Settings
+                        </button>
+                        <div className="dropdown-divider"></div>
+                        <button className="dropdown-item logout-item" onClick={handleLogout}>
+                          {renderIcon('logout')}
+                          Logout
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <span className="header-user-chevron">{renderIcon('chevronDown')}</span>
               </div>
             </div>
           </div>
