@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import api from '../../services/api';
 import './ActivityLog.css';
 
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 10;
 
 const ACTION_FILTERS = [
   { id: 'all', label: 'All' },
@@ -292,7 +292,7 @@ const ActivityLog = () => {
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [actionFilter, setActionFilter] = useState('all');
-  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+  const [currentPage, setCurrentPage] = useState(1);
   const [expandedItem, setExpandedItem] = useState(null);
 
   const fetchActivities = useCallback(async () => {
@@ -336,8 +336,9 @@ const ActivityLog = () => {
   }, [activities, searchQuery, actionFilter]);
 
   const visibleActivities = useMemo(() => {
-    return filteredActivities.slice(0, visibleCount);
-  }, [filteredActivities, visibleCount]);
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredActivities.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredActivities, currentPage]);
 
   const actionCounts = useMemo(() => {
     const counts = { all: activities.length };
@@ -350,12 +351,12 @@ const ActivityLog = () => {
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
-    setVisibleCount(ITEMS_PER_PAGE);
+    setCurrentPage(1);
   };
 
   const handleFilterChange = (filterId) => {
     setActionFilter(filterId);
-    setVisibleCount(ITEMS_PER_PAGE);
+    setCurrentPage(1);
   };
 
   const getUserName = (item) => item.user_name || item.userName || item.name || 'System';
@@ -570,11 +571,49 @@ const isAdminAction = ['UPDATE_USER', 'DELETE_USER', 'UPDATE_USER_STATUS'].inclu
             </>
           )}
 
-          {filteredActivities.length > visibleCount && (
-            <div className="activity-load-more">
-              <button type="button" onClick={() => setVisibleCount((c) => c + ITEMS_PER_PAGE)}>
-                Load More ({filteredActivities.length - visibleCount} remaining)
-              </button>
+          {filteredActivities.length > ITEMS_PER_PAGE && (
+            <div className="pagination-wrapper">
+              <div className="pagination-info">
+                Showing <strong>{(currentPage - 1) * ITEMS_PER_PAGE + 1}</strong> to <strong>{Math.min(currentPage * ITEMS_PER_PAGE, filteredActivities.length)}</strong> of <strong>{filteredActivities.length}</strong> activities
+              </div>
+              <div className="pagination">
+                <button
+                  type="button"
+                  className="pagination-btn"
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  aria-label="Previous page"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                </button>
+                {Array.from({ length: Math.ceil(filteredActivities.length / ITEMS_PER_PAGE) }, (_, i) => i + 1)
+                  .slice(Math.max(0, currentPage - 3), Math.min(Math.ceil(filteredActivities.length / ITEMS_PER_PAGE), currentPage + 2))
+                  .map((page) => (
+                    <button
+                      key={page}
+                      type="button"
+                      className={`pagination-btn ${currentPage === page ? 'active' : ''}`}
+                      onClick={() => setCurrentPage(page)}
+                      aria-label={`Page ${page}`}
+                      aria-current={currentPage === page ? 'page' : undefined}
+                    >
+                      {page}
+                    </button>
+                  ))}
+                <button
+                  type="button"
+                  className="pagination-btn"
+                  onClick={() => setCurrentPage(p => Math.min(Math.ceil(filteredActivities.length / ITEMS_PER_PAGE), p + 1))}
+                  disabled={currentPage === Math.ceil(filteredActivities.length / ITEMS_PER_PAGE)}
+                  aria-label="Next page"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </button>
+              </div>
             </div>
           )}
         </div>
