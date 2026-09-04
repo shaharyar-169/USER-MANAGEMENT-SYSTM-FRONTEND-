@@ -371,60 +371,75 @@ const ActivityLog = () => {
 
   return (
     <div className="activity-log">
-      <div className="activity-toolbar">
-        <div className="activity-toolbar-left">
-          <div className="activity-search">
-            <span className="activity-search-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-            </span>
-            <input
-              type="text"
-              placeholder="Search activities..."
-              value={searchQuery}
-              onChange={handleSearchChange}
-            />
-            {searchQuery && (
-              <button
-                type="button"
-                className="activity-search-clear"
-                onClick={() => setSearchQuery('')}
-                title="Clear search"
-              >
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </button>
-            )}
-          </div>
-
-          <div className="activity-filters">
-            {ACTION_FILTERS.map((filter) => (
-              <button
-                key={filter.id}
-                type="button"
-                className={`activity-filter-pill ${actionFilter === filter.id ? 'active' : ''}`}
-                onClick={() => handleFilterChange(filter.id)}
-              >
-                {filter.label}
-                <span className="activity-filter-count">{actionCounts[filter.id] || 0}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <button type="button" className="activity-refresh-btn" onClick={fetchActivities} title="Refresh">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={loading ? 'spinning' : ''}>
-            <polyline points="23 4 23 10 17 10"></polyline>
-            <polyline points="1 20 1 14 7 14"></polyline>
-            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+   <div className="activity-toolbar">
+  <div className="activity-toolbar-left">
+    <div className="activity-search">
+      <span className="activity-search-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </span>
+      <input
+        type="text"
+        placeholder="Search activities..."
+        value={searchQuery}
+        onChange={handleSearchChange}
+      />
+      {searchQuery && (
+        <button
+          type="button"
+          className="activity-search-clear"
+          onClick={() => setSearchQuery('')}
+          title="Clear search"
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
-          Refresh
         </button>
-      </div>
+      )}
+    </div>
+
+    {/* Search button - mobile only - uses refresh icon */}
+    <button
+      type="button"
+      className="activity-search-btn"
+      onClick={fetchActivities}
+      title="Refresh"
+      aria-label="Refresh"
+    >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={loading ? 'spinning' : ''}>
+        <polyline points="23 4 23 10 17 10"></polyline>
+        <polyline points="1 20 1 14 7 14"></polyline>
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+      </svg>
+    </button>
+
+    <div className="activity-filters">
+      {ACTION_FILTERS.map((filter) => (
+        <button
+          key={filter.id}
+          type="button"
+          className={`activity-filter-pill ${actionFilter === filter.id ? 'active' : ''}`}
+          onClick={() => handleFilterChange(filter.id)}
+        >
+          {filter.label}
+          <span className="activity-filter-count">{actionCounts[filter.id] || 0}</span>
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <button type="button" className="activity-refresh-btn" onClick={fetchActivities} title="Refresh">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={loading ? 'spinning' : ''}>
+      <polyline points="23 4 23 10 17 10"></polyline>
+      <polyline points="1 20 1 14 7 14"></polyline>
+      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+    </svg>
+    <span>Refresh</span>
+  </button>
+</div>
 
       <div className="activity-table-container">
         <div className="activity-header-row">
