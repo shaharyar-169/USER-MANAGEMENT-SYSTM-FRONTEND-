@@ -765,6 +765,16 @@
   .table-wrapper { border-radius: 10px; }
   .table-wrapper::before { border-radius: 10px 10px 0 0; }
 
+  .table-wrapper {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .user-table {
+    min-width: 700px;
+  }
+
   .pagination-wrapper {
     flex-direction: column;
     gap: 8px;
